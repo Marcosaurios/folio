@@ -1,13 +1,46 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Use a package of configuration called an orb.
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
+
+# Executors = environment in which the steps of a job will be run, to be reused
+executors:
+  node:
+    docker: 
+      - image: circleci/node:15.0
+
+# Parameters = Pipeline parameters declared for use in the configuration
+# parameters: 
+
+# Commands = commands to be reused in any jobs, with parameters
+commands:
+  saytheservice:
+      description: "Simple command to output a string and test"
+      parameters:
+        service:
+          type: string
+          default: "- service to be outputed -"
+      steps:
+        - run: echo << parameters.service >>
+
+#############
+#############
+# jobs:
+#   <name>:
+#       environment, parameters, paralellism, docker (-auth to access the registry)/machine, resource_class
+#       setps:
+#         - run / checkout / setup_remote_docker / store_tests_results / persist_to_workspace = store in workspace the specified paths here / attach_workspace / add_ssh_key
+
+# workflows:
+#   <name>:
+#       triggers: 
+#         schedule: cron, filters
+#       jobs: use filters here to filter by branch name
+
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
-  welcome:
+  deploy-dev:
     # Run the welcome/run job in its own container
     jobs:
       - welcome/run
+  deploy-prod:
+    jobs:
+      - 
