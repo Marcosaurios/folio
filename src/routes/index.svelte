@@ -1,50 +1,15 @@
 <script>
-	import successkid from 'images/successkid.jpg';
+	import { send, receive } from '$lib/Crossfade';
 </script>
 
-<style>
-	h1, figure, p {
-		text-align: center;
-		margin: 0 auto;
-	}
+<p out:send={{ key: 'firstext' }} in:receive={{ key: 'firstext' }}>holi</p>
 
-	h1 {
-		font-size: 2.8em;
-		text-transform: uppercase;
-		font-weight: 700;
-		margin: 0 0 0.5em 0;
-	}
+<h1>H1 header hghj j jgjhgjkgjkh gjh gghjgjhgjh gj gjhgjh gjh gjh jg j</h1>
+<h2>H2 header jhgjkhggjhkj kkjhjb jhkbkjh bkj bjh b jb kjh bkjhbkj</h2>
+<h3>H3 header fsdg fdsgds gfdsgfds gfsdgfdsgdf sd</h3>
+<p>This is a test gfdsgfsdg dsfg fdsgsdf gsdfg dfgfd gfds</p>
+<p>This another</p>
+<a href="/">Home</a>
 
-	figure {
-		margin: 0 0 1em 0;
-	}
-
-	img {
-		width: 100%;
-		max-width: 400px;
-		margin: 0 0 1em 0;
-	}
-
-	p {
-		margin: 1em auto;
-	}
-
-	@media (min-width: 480px) {
-		h1 {
-			font-size: 4em;
-		}
-	}
+<style lang="scss">
 </style>
-
-<svelte:head>
-	<title>Sapper project template</title>
-</svelte:head>
-
-<h1>Great success!</h1>
-
-<figure>
-	<img alt="Success Kid" src="{successkid}">
-	<figcaption>Have fun with Sapper!</figcaption>
-</figure>
-
-<p><strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong></p>

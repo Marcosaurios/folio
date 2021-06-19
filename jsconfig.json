@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"$app/*": [".svelte/dev/runtime/app/*", ".svelte/build/runtime/app/*"],
+			"$lib/*": ["src/lib/*"],
+			"$atoms/*": ["src/lib/Components/Atoms/*"],
+			"$molecules": ["src/lib/Components/Molecules/*"],
+			"$organisms": ["src/lib/Components/Organisms/*"],
+			"$templates": ["src/lib/Components/Templates/*"]
+		}
+	},
+	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte"]
+}

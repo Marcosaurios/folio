@@ -1,0 +1,66 @@
+// Baseline text settings
+$fontSize: 1.25rem; // Default font-size 20 px
+$fontSizeUnitless: $fontSize / ($fontSize * 0 + 1);
+$lineHeight: 1.5;
+
+:root {
+	//////////////////////////
+	// Shared rules and vars across components (themes, sizes, colors...)
+	//////////////////////////
+	--font-main-size: #{$fontSize};
+	--font-menu-item: 5rem;
+	--font-color: #fff;
+
+	font-family: 'Poppins', sans-serif;
+	color: var(--font-color);
+	// font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+	// 	'Open Sans', 'Helvetica Neue', sans-serif, 'Poppins';
+
+	// Fair lineHeight see https://kittygiraudel.com/2020/05/18/using-calc-to-figure-out-optimal-line-height/
+	line-height: calc(2px + 2ex + 2px);
+}
+
+:root * {
+	// Fair lineHeight to descendants
+	line-height: calc(2px + 2ex + 2px);
+}
+
+// Global
+body {
+	font-size: $fontSize;
+	line-height: $lineHeight;
+}
+
+// Avoid text overflow
+p,
+li,
+h1,
+h2,
+h3,
+h4 {
+	word-break: break-word;
+	hyphens: auto;
+}
+
+// Ratio-based typography scale
+$ratioType: 1.25; // Ratio type of 1.25 or majorThird
+$ratioBase: 1.25rem; // Same as fontSize, as it'll be the starting value
+$levels: 4, 3, 2, 1; // H4, H3, H2, H1
+
+// Generate headers
+$levelSize: $ratioBase;
+@each $level in $levels {
+	$levelSize: $levelSize * $ratioType;
+	h#{$level} {
+		font-size: $levelSize; // font-size fallback for fluid calc
+		margin-bottom: 0.65em;
+
+		// Fluid responsive font sizes
+		$levelUnitless: $levelSize / ($levelSize * 0 + 1);
+		$fluidReduction: if($levelSize > 4, 0.5, 0.33);
+		$fluidMin: $levelUnitless - ($fluidReduction * $levelUnitless);
+		$fluidMin: if($fluidMin > $fontSizeUnitless, $fluidMin, $fontSizeUnitless);
+		$fluidScaler: ($levelUnitless - $fluidMin) + 4vw;
+		font-size: unquote('min(max(#{$fluidMin}rem, #{$fluidScaler}), #{$levelSize})');
+	}
+}
