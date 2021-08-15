@@ -1,7 +1,8 @@
 <script>
 	import Motion from 'svelte-motion/src/motion/MotionSSR.svelte';
 
-	export let listVariants, initial, onComplete;
+	export let listVariants, initial;
+	export let onComplete = () => {};
 
 	// Controller
 	export let animate = false;

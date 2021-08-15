@@ -1,22 +1,10 @@
 <script>
-	import { onMount } from 'svelte';
 	import MotionUl from '../Atoms/MotionUl.svelte';
 	import MotionLi from '../Atoms/MotionLi.svelte';
 	import MenuItem from '../Molecules/MenuItem.svelte';
 
 	let isOpen = false;
 	const triggerNav = () => (isOpen = !isOpen);
-
-	let navigateTo = false;
-
-	onMount(() => {
-		// TODO resize?
-		// function sizesUpdated(e) {
-		// 	e.target.innerWidth > 500 ? (isOpen = true) : 0;
-		// 	heightCheck();
-		// }
-		// window.onresize = sizesUpdated;
-	});
 
 	// TODO create reactive variable to fetch current path (active menu item)
 	const items = [
@@ -48,42 +36,14 @@
 		visible: { opacity: 1 },
 		hidden: { opacity: 0 }
 	};
-
-	/**
-	 * Closes the menu, avoids navigating and sets the link
-	 *
-	 * @param e	Event triggered from click
-	 * @param link	Link to navigate
-	 */
-	const onLinkClicked = (e, link) => {
-		isOpen = false;
-		e.preventDefault();
-
-		navigateTo = link;
-	};
 </script>
 
-<MotionUl
-	animate={isOpen ? 'visible' : 'hidden'}
-	{listVariants}
-	onComplete={function (animationName) {
-		console.log(animationName, 'Completed from parent');
-
-		if (animationName == 'hidden' && !isOpen && window.location != navigateTo && navigateTo) {
-			window.location = navigateTo;
-		}
-	}}
-	initial="hidden"
->
+<MotionUl animate={isOpen ? 'visible' : 'hidden'} {listVariants} initial="hidden">
 	<nav>
 		<ul>
 			{#each items as item}
 				<MotionLi variants={itemVariants}>
-					<svelte:component
-						this={item.component}
-						href={item?.href}
-						on:click={(e) => onLinkClicked(e, item?.href)}
-					>
+					<svelte:component this={item.component} href={item?.href} on:click={triggerNav}>
 						{item?.content}
 					</svelte:component>
 				</MotionLi>
@@ -97,11 +57,12 @@
 <style lang="scss">
 	@import 'src/lib/_common/_viewports';
 
-	// MOBILE FIRST
+	/* mobile first */
 	nav {
 		width: 100%;
 		height: 100vh;
 		margin: 0 auto;
+		z-index: 9999999;
 
 		background-color: var(--menu-bg);
 

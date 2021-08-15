@@ -1,8 +1,8 @@
 <script>
-	import { send, receive } from '$lib/Crossfade';
+	// import { send, receive } from '$lib/Crossfade';
 </script>
 
-<p out:send={{ key: 'firstext' }} in:receive={{ key: 'firstext' }}>holi</p>
+<!-- <p out:send={{ key: 'firstext' }} in:receive={{ key: 'firstext' }}>holi</p> -->
 
 <h1>H1 header hghj j jgjhgjkgjkh gjh gghjgjhgjh gj gjhgjh gjh gjh jg j</h1>
 <h2>H2 header jhgjkhggjhkj kkjhjb jhkbkjh bkj bjh b jb kjh bkjhbkj</h2>

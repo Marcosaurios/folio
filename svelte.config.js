@@ -1,13 +1,15 @@
-const sveltePreprocess = require('svelte-preprocess');
-const node = require('@sveltejs/adapter-node');
-const pkg = require('./package.json');
-const path = require('path');
+import preprocess from 'svelte-preprocess';
+import node from '@sveltejs/adapter-node';
+import path from 'path';
+import fs from 'fs';
+
+const pkg = JSON.parse(fs.readFileSync(new URL('package.json', import.meta.url), 'utf8'));
 
 /** @type {import('@sveltejs/kit').Config} */
-module.exports = {
+const config = {
 	// Consult https://github.com/sveltejs/svelte-preprocess
 	// for more information about preprocessors
-	preprocess: sveltePreprocess({
+	preprocess: preprocess({
 		// sveltePreprocess settings
 		sass: {
 			outputStyle: 'compressed'
@@ -22,9 +24,12 @@ module.exports = {
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
 
+		ssr: true,
+
+		/** @type {import('vite').UserConfig} */
 		vite: {
 			ssr: {
-				noExternal: Object.keys(pkg.dependencies || {})
+				noExternal: []
 			},
 			resolve: {
 				alias: {
@@ -33,7 +38,16 @@ module.exports = {
 					$organisms: path.resolve('src/lib/Components/Organisms'),
 					$templates: path.resolve('src/lib/Components/Templates')
 				}
+			},
+			optimizeDeps: {
+				include: ['style-value-types', 'popmotion', 'framesync'],
+				esbuildOptions: {
+					bundle: true,
+					target: 'es6'
+				}
 			}
 		}
 	}
 };
+
+export default config;
