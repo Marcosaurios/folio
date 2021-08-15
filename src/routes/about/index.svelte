@@ -16,21 +16,6 @@
 	};
 </script>
 
-<!-- <main>
-	<h1>Hello world!</h1>
-
-	<p out:send={{ key: 'firstext' }} in:receive={{ key: 'firstext' }}>holi</p>
-</main> -->
-
-<Motion animate={!visible ? 'visible' : 'hidden'} variants={item} let:motion>
-	<ul use:motion>
-		{#each animatedArray as arrayValue}
-			<MotionLi variants={item} text={arrayValue} />
-		{/each}
-	</ul>
-	<div on:click={(visible = !visible)}>Hello</div>
-</Motion>
-
 <style>
 	div {
 		width: 100px;

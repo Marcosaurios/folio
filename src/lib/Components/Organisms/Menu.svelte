@@ -1,40 +1,44 @@
 <script>
 	import { onMount } from 'svelte';
-	import MenuItem from '../Molecules/MenuItem.svelte';
 	import MotionUl from '../Atoms/MotionUl.svelte';
 	import MotionLi from '../Atoms/MotionLi.svelte';
+	import MenuItem from '../Molecules/MenuItem.svelte';
 
 	let isOpen = false;
 	const triggerNav = () => (isOpen = !isOpen);
 
+	let navigateTo = false;
+
 	onMount(() => {
-		function sizesUpdated(e) {
-			e.target.innerWidth > 500 ? (isOpen = true) : 0;
-		}
-		window.onresize = sizesUpdated;
+		// TODO resize?
+		// function sizesUpdated(e) {
+		// 	e.target.innerWidth > 500 ? (isOpen = true) : 0;
+		// 	heightCheck();
+		// }
+		// window.onresize = sizesUpdated;
 	});
 
 	// TODO create reactive variable to fetch current path (active menu item)
-
 	const items = [
-		{ component: MenuItem, content: 'Home', props: { href: '/' } },
-		{ component: MenuItem, content: 'About', props: { href: '/about' } },
-		{ component: MenuItem, content: 'Hello', props: { href: '/helo' } }
+		{ component: MenuItem, content: 'Home', href: '/' },
+		{ component: MenuItem, content: 'About', href: '/about' },
+		{ component: MenuItem, content: 'Hello', href: '/helo' }
 	];
 	const listVariants = {
 		visible: {
-			transform: 'translateX(0px)',
+			transform: 'translateY(0px)',
 			transition: {
+				type: 'tween',
 				when: 'beforeChildren',
-				staggerChildren: 0.3,
+				staggerChildren: 0.2,
 				staggerDirection: 1
 			}
 		},
 		hidden: {
-			transform: 'translateX(-100vw)',
+			transform: 'translateY(-1000px)',
 			transition: {
 				when: 'afterChildren',
-				staggerChildren: 0.3,
+				staggerChildren: 0.2,
 				staggerDirection: -1
 			}
 		}
@@ -44,14 +48,42 @@
 		visible: { opacity: 1 },
 		hidden: { opacity: 0 }
 	};
+
+	/**
+	 * Closes the menu, avoids navigating and sets the link
+	 *
+	 * @param e	Event triggered from click
+	 * @param link	Link to navigate
+	 */
+	const onLinkClicked = (e, link) => {
+		isOpen = false;
+		e.preventDefault();
+
+		navigateTo = link;
+	};
 </script>
 
-<MotionUl {isOpen} {listVariants} initial="hidden">
+<MotionUl
+	animate={isOpen ? 'visible' : 'hidden'}
+	{listVariants}
+	onComplete={function (animationName) {
+		console.log(animationName, 'Completed from parent');
+
+		if (animationName == 'hidden' && !isOpen && window.location != navigateTo && navigateTo) {
+			window.location = navigateTo;
+		}
+	}}
+	initial="hidden"
+>
 	<nav>
 		<ul>
 			{#each items as item}
 				<MotionLi variants={itemVariants}>
-					<svelte:component this={item.component} {...item?.props}>
+					<svelte:component
+						this={item.component}
+						href={item?.href}
+						on:click={(e) => onLinkClicked(e, item?.href)}
+					>
 						{item?.content}
 					</svelte:component>
 				</MotionLi>
@@ -73,12 +105,8 @@
 
 		background-color: var(--menu-bg);
 
-		position: absolute;
+		position: relative;
 
-		display: flex;
-		flex-direction: column;
-		/* justify-content: center; */
-		justify-content: flex-start;
 		overflow: hidden;
 
 		@include desktop {
@@ -89,6 +117,10 @@
 		}
 
 		ul {
+			display: flex;
+			flex-direction: column;
+			/* justify-content: center; */
+			justify-content: flex-start;
 			list-style: none;
 
 			a {
