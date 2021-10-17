@@ -2,16 +2,19 @@
 	import MotionUl from '../Atoms/MotionUl.svelte';
 	import MotionLi from '../Atoms/MotionLi.svelte';
 	import MenuItem from '../Molecules/MenuItem.svelte';
+	// import Motion from '../Atoms/Motion.svelte';
 
 	let isOpen = false;
-	const triggerNav = () => (isOpen = !isOpen);
+	const triggerNav = () => {
+		isOpen = !isOpen;
+	};
 
-	// TODO create reactive variable to fetch current path (active menu item)
 	const items = [
 		{ component: MenuItem, content: 'Home', href: '/' },
 		{ component: MenuItem, content: 'About', href: '/about' },
 		{ component: MenuItem, content: 'Hello', href: '/helo' }
 	];
+
 	const listVariants = {
 		visible: {
 			transform: 'translateY(0px)',
@@ -36,6 +39,27 @@
 		visible: { opacity: 1 },
 		hidden: { opacity: 0 }
 	};
+
+	// Gradients
+	const gradientsVariants = {
+		visible: {
+			transform: 'scaleY(1)',
+			transition: {
+				type: 'tween',
+				when: 'beforeChildren',
+				staggerChildren: 3,
+				staggerDirection: 1
+			}
+		},
+		hidden: {
+			transform: 'scaleY(0)',
+			transition: {
+				when: 'afterChildren',
+				staggerChildren: 3,
+				staggerDirection: -1
+			}
+		}
+	};
 </script>
 
 <MotionUl animate={isOpen ? 'visible' : 'hidden'} {listVariants} initial="hidden">
@@ -49,6 +73,9 @@
 				</MotionLi>
 			{/each}
 		</ul>
+		<!-- <Motion animate={!isOpen ? 'visible' : 'hidden'} initial="hidden" {gradientsVariants}> -->
+		<!-- <div class="gradients" /> -->
+		<!-- </Motion> -->
 	</nav>
 </MotionUl>
 
@@ -62,7 +89,7 @@
 		width: 100%;
 		height: 100vh;
 		margin: 0 auto;
-		z-index: 9999999;
+		z-index: var(--menuZindex);
 
 		background-color: var(--menu-bg);
 
@@ -83,10 +110,10 @@
 			/* justify-content: center; */
 			justify-content: flex-start;
 			list-style: none;
-
+			/* 
 			a {
 				padding: 1em;
-			}
+			} */
 		}
 	}
 
@@ -97,9 +124,20 @@
 		background-color: white;
 		z-index: 9999;
 
-		@include desktop {
+		/* @include desktop {
 			visibility: hidden;
 			display: none;
-		}
+		} */
+	}
+
+	div.gradients {
+		top: 35px;
+		left: 25px;
+		width: 2px;
+		height: 100%;
+
+		position: absolute;
+
+		background-image: linear-gradient(180deg, white, transparent);
 	}
 </style>

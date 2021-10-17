@@ -1,10 +1,12 @@
 <script>
+	import { page } from '$app/stores';
+
 	export let href = '/';
 
-	// export let content = 'default';
+	$: isActive = $page.path === href;
 </script>
 
-<a class="menu-item" {href} on:click style="--prop-text: helo">
+<a class="menu-item" {href} on:click class:selected={isActive}>
 	<slot />
 </a>
 
@@ -29,10 +31,8 @@
 		/* Animation */
 		transition: all 0.3s ease-in-out;
 	}
-	/* 
-	.menu-item::after {
-		content: convert(var(--prop-text) string);
-		width: 50px;
-		background-color: red;
-	} */
+
+	.menu-item.selected {
+		-webkit-text-fill-color: white;
+	}
 </style>

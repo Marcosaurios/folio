@@ -24,8 +24,8 @@
 
 <style>
 	span {
-		display: block;
-		position: absolute;
+		/* display: block;
+		position: absolute; */
 
 		width: 100%;
 

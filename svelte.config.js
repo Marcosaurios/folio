@@ -1,9 +1,6 @@
 import preprocess from 'svelte-preprocess';
-import node from '@sveltejs/adapter-node';
 import path from 'path';
-import fs from 'fs';
-
-const pkg = JSON.parse(fs.readFileSync(new URL('package.json', import.meta.url), 'utf8'));
+import adapter from '@sveltejs/adapter-static';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -19,7 +16,7 @@ const config = {
 		// By default, `npm run build` will create a standard Node app.
 		// You can create optimized builds for different platforms by
 		// specifying a different adapter
-		adapter: node(),
+		adapter: adapter(),
 
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
@@ -28,9 +25,6 @@ const config = {
 
 		/** @type {import('vite').UserConfig} */
 		vite: {
-			ssr: {
-				noExternal: []
-			},
 			resolve: {
 				alias: {
 					$atoms: path.resolve('src/lib/Components/Atoms'),
@@ -39,12 +33,8 @@ const config = {
 					$templates: path.resolve('src/lib/Components/Templates')
 				}
 			},
-			optimizeDeps: {
-				include: ['style-value-types', 'popmotion', 'framesync'],
-				esbuildOptions: {
-					bundle: true,
-					target: 'es6'
-				}
+			ssr: {
+				noExternal: ['style-value-types', 'popmotion', 'framesync']
 			}
 		}
 	}
